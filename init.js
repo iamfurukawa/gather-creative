@@ -2,11 +2,11 @@ console.log("[GatherCreative] inject completed");
 console.log("[GatherCreative] initializing GatherCreative functions");
 
 // flags
-telemove       = 0;
-squaredance    = 0;
-updowndance    = 0;
+telemove = 0;
+squaredance = 0;
+updowndance = 0;
 rightleftdance = 0;
-battlemode     = 0;
+battlemode = 0;
 
 
 // global parameters
@@ -16,15 +16,15 @@ dancespeed = 200;  // dancing speed
 
 // private functions
 function GetPos() {
-  curStats = gameSpace.gameState[gameSpace.id];
-  return {x:curStats.x, y:curStats.y};
+	curStats = gameSpace.gameState[gameSpace.id];
+	return { x: curStats.x, y: curStats.y };
 };
 
 function GetPlayerPos(playername) {
-	for(playerId of Object.keys(gameSpace.gameState)) {
+	for (playerId of Object.keys(gameSpace.gameState)) {
 		player = gameSpace.gameState[playerId];
-		if(player.name == playername) {
-			return {x:player.x, y:player.y}
+		if (player.name == playername) {
+			return { x: player.x, y: player.y }
 		}
 	}
 }
@@ -34,28 +34,28 @@ function GetPlayerPos(playername) {
 //   description: use arrow key to move anywhere without colliding to object. (can go anywhere)
 //   * boost variable: value of speed
 async function TeleportMove(keycode) {
-	curPos   = GetPos();
+	curPos = GetPos();
 	curMapId = gameSpace.mapId;
 
 	switch (keycode) {
 		case 37: // left arrow
-			game.teleport(curMapId, curPos.x-boost, curPos.y);
+			game.teleport(curMapId, curPos.x - boost, curPos.y);
 			break;
 		case 38: // up arrow
-			game.teleport(curMapId, curPos.x, curPos.y-boost);
+			game.teleport(curMapId, curPos.x, curPos.y - boost);
 			break;
 		case 39: // right arrow
-			game.teleport(curMapId, curPos.x+boost, curPos.y);
+			game.teleport(curMapId, curPos.x + boost, curPos.y);
 			break;
 		case 40: // down arrow
-			game.teleport(curMapId, curPos.x, curPos.y+boost);
+			game.teleport(curMapId, curPos.x, curPos.y + boost);
 			break;
 	}
 }
-window.addEventListener("teleportmove_enable", function() {
+window.addEventListener("teleportmove_enable", function () {
 	telemove = 1;
 }, false);
-window.addEventListener("teleportmove_disable", function() {
+window.addEventListener("teleportmove_disable", function () {
 	telemove = 0;
 }, false);
 window.addEventListener("changeboost", e => {
@@ -67,48 +67,48 @@ window.addEventListener("changeboost", e => {
 // description: square dance until squaredance flag is set to 0
 // * dancespeed: speed of dancing
 async function SquareDance() {
-	curPos   = GetPos();
+	curPos = GetPos();
 	curMapId = gameSpace.mapId;
 
 	squaredance = 1;
-	while(squaredance==1) {
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y-1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one up
+	while (squaredance == 1) {
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y - 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // one up
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x+1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed));
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x + 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed));
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x+1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed)); // two right
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x + 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed)); // two right
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y+1);
-	  await new Promise(r => setTimeout(r, dancespeed));
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y + 1);
+		await new Promise(r => setTimeout(r, dancespeed));
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y+1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // two down
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y + 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // two down
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x-1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed));
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x - 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed));
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x-1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed)); // two left
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x - 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed)); // two left
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y-1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one up
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y - 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // one up
 	}
 }
-window.addEventListener("squaredance_enable", function() {
+window.addEventListener("squaredance_enable", function () {
 	SquareDance();
 }, false);
-window.addEventListener("squaredance_disable", function() {
+window.addEventListener("squaredance_disable", function () {
 	squaredance = 0;
 }, false);
 
@@ -117,32 +117,32 @@ window.addEventListener("squaredance_disable", function() {
 // description: updown dance until updowndance flag is set to 0
 // * dancespeed: speed of dancing
 async function UpDownDance() {
-	curPos   = GetPos();
+	curPos = GetPos();
 	curMapId = gameSpace.mapId;
 
 	updowndance = 1;
-	while(updowndance==1) {
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y-1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one up
+	while (updowndance == 1) {
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y - 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // one up
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y+1);
-	  await new Promise(r => setTimeout(r, dancespeed));
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y + 1);
+		await new Promise(r => setTimeout(r, dancespeed));
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y+1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // two down
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y + 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // two down
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x, curPos.y-1);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one up
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x, curPos.y - 1);
+		await new Promise(r => setTimeout(r, dancespeed)); // one up
 	}
 }
-window.addEventListener("updowndance_enable", function() {
+window.addEventListener("updowndance_enable", function () {
 	UpDownDance();
 }, false);
-window.addEventListener("updowndance_disable", function() {
+window.addEventListener("updowndance_disable", function () {
 	updowndance = 0;
 }, false);
 
@@ -151,32 +151,32 @@ window.addEventListener("updowndance_disable", function() {
 // description: rightleft dance until rightleftdance flag is set to 0
 // * dancespeed: speed of dancing
 async function RightLeftDance() {
-	curPos   = GetPos();
+	curPos = GetPos();
 	curMapId = gameSpace.mapId;
 
 	rightleftdance = 1;
-	while(rightleftdance==1) {
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x+1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one right
+	while (rightleftdance == 1) {
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x + 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed)); // one right
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x-1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed));
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x - 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed));
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x-1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed)); // two left
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x - 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed)); // two left
 
-	  gameSpace.dance();
-	  game.teleport(curMapId, curPos.x+1, curPos.y);
-	  await new Promise(r => setTimeout(r, dancespeed)); // one right
+		gameSpace.dance();
+		game.teleport(curMapId, curPos.x + 1, curPos.y);
+		await new Promise(r => setTimeout(r, dancespeed)); // one right
 	}
 }
-window.addEventListener("rightleftdance_enable", function() {
+window.addEventListener("rightleftdance_enable", function () {
 	RightLeftDance();
 }, false);
-window.addEventListener("rightleftdance_disable", function() {
+window.addEventListener("rightleftdance_disable", function () {
 	rightleftdance = 0;
 }, false);
 
@@ -192,10 +192,10 @@ window.addEventListener("changedancespeed", e => {
 async function Ghost(enabled) {
 	game.ghost(enabled, undefined);
 }
-window.addEventListener("ghost_enable", function() {
+window.addEventListener("ghost_enable", function () {
 	Ghost(1);
 }, false);
-window.addEventListener("ghost_disable", function() {
+window.addEventListener("ghost_disable", function () {
 	Ghost(0);
 }, false);
 
@@ -213,7 +213,7 @@ window.addEventListener("outputsingleemote", e => {
 // multi emote
 //   - msg: message(string) is shown one word at a time
 async function MultiEmote(msg) {
-	for(c in msg) {
+	for (c in msg) {
 		game.setEmote(msg.charAt(c), undefined);
 		await new Promise(r => setTimeout(r, 500));
 	}
@@ -233,10 +233,10 @@ async function BoulderMagic(keycode) {
 	itemname = "Boulder (2x2)";
 	curRoom = gameSpace.maps[gameSpace.mapId];
 	curPos = GetPos();
-	for(let i=0; i<attackLength; i++) {
+	for (let i = 0; i < attackLength; i++) {
 		item = curRoom.objects.filter(o => (o._name).includes(itemname))[0];
 
-		switch(keycode) {
+		switch (keycode) {
 			case 73: // i (up)
 				item.x = curPos.x - 1;
 				item.y = curPos.y - 1 - i;
@@ -260,17 +260,17 @@ async function BoulderMagic(keycode) {
 	}
 	await new Promise(r => setTimeout(r, 150));
 	curRoom = gameSpace.maps[gameSpace.mapId];
-	for(let i=0; i<attackLength; i++) {
-		try{
+	for (let i = 0; i < attackLength; i++) {
+		try {
 			game.deleteObjectByKey(curRoom.id, curRoom.objects.filter(o => (o._name).includes(itemname))[1].key, true);
-		} catch(e){}
+		} catch (e) { }
 		await new Promise(r => setTimeout(r, 100));
 	}
 }
-window.addEventListener("battlemode_enable", function() {
+window.addEventListener("battlemode_enable", function () {
 	battlemode = 1;
 }, false);
-window.addEventListener("battlemode_disable", function() {
+window.addEventListener("battlemode_disable", function () {
 	battlemode = 0;
 }, false);
 
@@ -282,10 +282,10 @@ async function SurroundByBoulder(target) {
 	attackLength = 3;
 	itemname = "Boulder (2x2)";
 	curRoom = gameSpace.maps[gameSpace.mapId];
-	for(let j=0; j<attackLength; j++) {
-		for(let i=0; i<attackLength; i++) {
+	for (let j = 0; j < attackLength; j++) {
+		for (let i = 0; i < attackLength; i++) {
 			item = curRoom.objects.filter(o => (o._name).includes(itemname))[0];
-			item.x = targetPos.x - 1 - Math.floor(attackLength/2) + i;
+			item.x = targetPos.x - 1 - Math.floor(attackLength / 2) + i;
 			item.y = targetPos.y - 1 + j;
 			game.setObject(curRoom.id, item.templateId, item, true);
 			await new Promise(r => setTimeout(r, 150));
@@ -297,93 +297,209 @@ window.addEventListener("surroundbyboulder", e => {
 }, false);
 
 
-
-// key input handler
-document.onkeydown = function (event) {
-	if(telemove==1) {
-		if(event.keyCode>=37 && event.keyCode<=40) {
-			TeleportMove(event.keyCode);
-		}
-	}
-	if(battlemode==1) {
-		if(event.keyCode>=73 && event.keyCode<=76) {
-			BoulderMagic(event.keyCode);
-		}
-	}
-};
-
-//Vini updates
+/**
+ * Event Enum
+ */
 const GatherEvents = {
 	//Teleport events
-	TELEPORT_TO_OTHER: 0,
-	TELEPORT_TO_ME: 1,
-	TELEPORT_TO_PLACE: 2,
-	TELEPORT_OTHER_TO_PLACE: 3,
-	//TODO: TELEPORT_ALL:9
+	TELEPORT_TO_OTHER: 10,
+	TELEPORT_TO_ME: 11,
+	TELEPORT_TO_PLACE: 12,
+	TELEPORT_OTHER_TO_PLACE: 13,
+	TELEPORT_ALL_TO_PLACE: 14,
+	TELEPORT_ALL_TO_HERE: 15,
 	//Place events
-	NEW_PLACE: 4,
+	NEW_PLACE: 50,
 	//Ghost events
-	GHOST_PLAYER: 5,
-	GHOST_SELF: 6,
+	GHOST_PLAYER: 100,
+	GHOST_SELF: 101,
 	//Player Events
-	RING: 7,
+	RING: 150,
 	//Space private
 	NO_DEIVID: 666,
- };
- Object.freeze(GatherEvents);
 
+	//TODO whisper!
+};
+Object.freeze(GatherEvents);
 
+/**
+ * Classes
+ */
 class Player {
-	constructor(id, x, y, mapId) {
-		this.mapId = mapId;
+	constructor() {
+		this.gatherCore = new GatherCore();
+	}
+
+	set id(id) {
 		this.id = id;
+	}
+
+	set x(x) {
 		this.x = x;
-		thix.y = y;
 	}
 
-	teleportTo(player) {
-		this._teleport(player.x, player.y, this.id)
+	set y(y) {
+		this.y = y;
 	}
 
-	teleportTo(place) {
-		this._teleport(place.x, place.y, this.id)
+	set mapId(mapId) {
+		this.mapId = mapId;
 	}
 
-	teleportFrom(player) {
-		this._teleport(this.x, this.y, player.id)
+	teleportToOther(player) {
+		this._teleport(player.x, player.y, this.id, player.mapId)
+	}
+
+	teleportToPlace(place) {
+		this._teleport(place.x, place.y, this.id, place.mapId)
+	}
+
+	teleportToMe(player) {
+		this._teleport(this.x, this.y, player.id, this.mapId)
 	}
 
 	activeGhostMode() {
+		this.gatherCore.activeGhost();
 	}
 
-	_teleport(x, y, id) {
+	deactivateGhostMode() {
+		this.gatherCore.deactivateGhost();
+	}
+
+	_teleport(x, y, id, mapId) {
+		this.gatherCore.teleport(mapId, x, y, id);
 	}
 }
 
 class Place {
-	constructor(name, x, y) {
+	constructor() {
 		this.mapId = game.mapId;
 		this.id = Date.now();
-		this.name = name;
+		this.gatherCore = new GatherCore();
+	}
+
+	set x(x) {
 		this.x = x;
-		thix.y = y;
+	}
+
+	set y(y) {
+		this.y = y;
+	}
+
+	set name(name) {
+		this.name = name;
 	}
 
 	teleportTo(player) {
+		this.gatherCore.teleport(player.mapId, player.x, player.y, player.id);
 	}
 }
 
 class Area {
-	constructor(name, places) {
+	constructor() {
 		this.id = Date.now();
+		this.gatherCore = new GatherCore();
+	}
+
+	set name(name) {
 		this.name = name;
+	}
+
+	set places(places) {
 		this.places = places;
 	}
 
 	blockList(players) {
+		this.blockedPlayer = players;
 	}
 
 	startMonitoring() {
+	}
+}
+
+class GatherCore {
+
+	constructor() {
+		if (GatherCore._instance) {
+			return GatherCore._instance
+		}
+		GatherCore._instance = this;
+	}
+
+	teleport(mapId, x, y, playerId) {
+		game.teleport(mapId, x, y, playerId);
+	}
+
+	whisper(player) {
+		game.enterWhisper(player.id);
+	}
+
+	activeGhost() {
+		ghostMode(1);
+	}
+
+	deactivateGhost() {
+		ghostMode(0);
+	}
+
+	ghostMode(flag) {
+		game.ghost(flag, undefined);
+	}
+
+	ring(player) {
+		gameSpace.ringUser(player.id);
+	}
+
+	retrievePlayers() {
+		return Object.keys(gameSpace.gameState)
+			.map(id => {
+				const playerData = gameSpace.gameState[id];
+				const player = new Player();
+				player.id = id;
+				player.x = playerData.x;
+				player.y = playerData.y;
+				player.mapId = playerData.map;
+				return newPlayer;
+			})
+	}
+
+	retrieveMe() {
+		const myData = gameSpace.gameState[gameSpace.id];
+		const me = new Player();
+		me.id = gameSpace.id;
+		me.x = myData.x;
+		me.y = myData.y;
+		me.mapId = myData.map;
+		return newPlayer;
+	}
+}
+
+class Storage {
+
+	static PLACES = "gather_places";
+	static AREAS = "gather_areas";
+
+	constructor() {
+		if (Storage._instance) {
+			return Storage._instance
+		}
+		Storage._instance = this;
+	}
+
+	findAllPlaces() {
+		localStorage.getItem(PLACES)
+	}
+
+	savePlace(place) {
+		localStorage.setItem(PLACES, JSON.stringify(place))
+	}
+
+	findAllAreas() {
+		localStorage.getItem(AREAS)
+	}
+
+	saveArea(area) {
+		localStorage.setItem(AREAS, JSON.stringify(place))
 	}
 }
 
