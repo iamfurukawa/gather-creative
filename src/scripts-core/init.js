@@ -275,28 +275,6 @@ window.addEventListener("battlemode_disable", function () {
 }, false);
 
 
-// Surround By Boulder
-//   description: surround target player by "Boulder (2x2)" object
-async function SurroundByBoulder(target) {
-	targetPos = GetPlayerPos(target);
-	attackLength = 3;
-	itemname = "Boulder (2x2)";
-	curRoom = gameSpace.maps[gameSpace.mapId];
-	for (let j = 0; j < attackLength; j++) {
-		for (let i = 0; i < attackLength; i++) {
-			item = curRoom.objects.filter(o => (o._name).includes(itemname))[0];
-			item.x = targetPos.x - 1 - Math.floor(attackLength / 2) + i;
-			item.y = targetPos.y - 1 + j;
-			game.setObject(curRoom.id, item.templateId, item, true);
-			await new Promise(r => setTimeout(r, 150));
-		}
-	}
-}
-window.addEventListener("surroundbyboulder", e => {
-	SurroundByBoulder(e.detail);
-}, false);
-
-
 /**
  * Event Enum
  */
@@ -331,19 +309,19 @@ class Player {
 	}
 
 	set id(id) {
-		this.id = id;
+		this._id = id;
 	}
 
 	set x(x) {
-		this.x = x;
+		this._x = x;
 	}
 
 	set y(y) {
-		this.y = y;
+		this._y = y;
 	}
 
 	set mapId(mapId) {
-		this.mapId = mapId;
+		this._mapId = mapId;
 	}
 
 	teleportToOther(player) {
@@ -459,7 +437,7 @@ class GatherCore {
 				player.x = playerData.x;
 				player.y = playerData.y;
 				player.mapId = playerData.map;
-				return newPlayer;
+				return player;
 			})
 	}
 
@@ -503,5 +481,27 @@ class Storage {
 	}
 }
 
+
+function retrievePlayers() {
+	return Object.keys(gameSpace.gameState)
+		.map(id => {
+			const playerData = gameSpace.gameState[id];
+			const player = new Player();
+			player.id = id;
+			player.x = playerData.x;
+			player.y = playerData.y;
+			player.mapId = playerData.map;
+			return player;
+		})
+}
+
+window.addEventListener("a", function() {
+	console.log('aaaaaaaaa')
+	const players = retrievePlayers()
+	console.log(JSON.stringify(players))
+	// chrome.extension.sendMessage(JSON.stringify(players), function(response) {
+	// 	//callback
+	//  });
+}, false);
 
 console.log("[GatherCreative] initializing complete");

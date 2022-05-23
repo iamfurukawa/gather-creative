@@ -5,7 +5,7 @@
   "description": "Creative mode for gather.town",
   "permissions": ["tabs", "activeTab"],
   "browser_action": {
-    "default_popup": "popup.html"
+    "default_popup": "index.html"
   },
   "content_scripts": [
     {
